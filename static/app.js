@@ -10,9 +10,9 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
 
 // ---------- Helpers ----------
 function formatSize(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  if (bytes < 1024) return `${bytes} ${i18n.t("size.byte")}`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} ${i18n.t("size.kilobyte")}`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)} ${i18n.t("size.megabyte")}`;
 }
 
 function calcReduction(orig, comp) {
@@ -90,7 +90,6 @@ function initCompressTab(tabId, endpoint) {
 
   let currentBlob = null;
   let currentFilename = "";
-  const originalLabel = btn.textContent;
 
   input.addEventListener("change", () => {
     const file = input.files[0];
@@ -108,7 +107,7 @@ function initCompressTab(tabId, endpoint) {
     if (!file) return;
 
     btn.disabled = true;
-    btn.textContent = "Compressing...";
+    btn.textContent = i18n.t("state.compressing");
     progressBar.hidden = false;
     progressFill.style.width = "0%";
 
@@ -129,9 +128,9 @@ function initCompressTab(tabId, endpoint) {
         };
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.response);
-          else reject(new Error(`Server error ${xhr.status}`));
+          else reject(new Error(i18n.t("error.server_error", { status: xhr.status })));
         };
-        xhr.onerror = () => reject(new Error("Network error"));
+        xhr.onerror = () => reject(new Error(i18n.t("error.network_error")));
         xhr.send(formData);
       });
 
@@ -150,13 +149,13 @@ function initCompressTab(tabId, endpoint) {
       tab.querySelector(".compressed-size").textContent = formatSize(compSize);
       tab.querySelector(".reduction").textContent = calcReduction(origSize, compSize);
       results.hidden = false;
-      btn.textContent = originalLabel;
+      btn.textContent = i18n.t(btn.dataset.i18n);
       btn.disabled = false;
     } catch (err) {
-      btn.textContent = originalLabel;
+      btn.textContent = i18n.t(btn.dataset.i18n);
       btn.disabled = false;
       progressBar.hidden = true;
-      alert(`Error: ${err.message}`);
+      alert(i18n.t("error.generic", { message: err.message }));
     }
   });
 
@@ -271,7 +270,7 @@ function updateMergeInputFiles() {
 mergeBtn.addEventListener("click", async () => {
   if (mergeFiles.length < 2) return;
   mergeBtn.disabled = true;
-  mergeBtn.textContent = "Merging...";
+  mergeBtn.textContent = i18n.t("state.merging");
   mergeProgress.hidden = false;
   mergeProgressFill.style.width = "0%";
 
@@ -301,10 +300,10 @@ mergeBtn.addEventListener("click", async () => {
 
     const totalPages = 0; // We'll get from server header
     const resultSize = result.size;
-    mergeTab.querySelector(".total-pages").textContent = mergeFiles.length + " files";
+    mergeTab.querySelector(".total-pages").textContent = i18n.t("result.files_count", { n: mergeFiles.length });
     mergeTab.querySelector(".result-size").textContent = formatSize(resultSize);
     mergeResults.hidden = false;
-    mergeBtn.textContent = "Merge PDFs";
+    mergeBtn.textContent = i18n.t(mergeBtn.dataset.i18n);
     mergeBtn.disabled = false;
 
     mergeTab.querySelector(".btn-download").onclick = () => {
@@ -327,9 +326,18 @@ mergeBtn.addEventListener("click", async () => {
       mergeBtn.disabled = true;
     });
   } catch (err) {
-    mergeBtn.textContent = "Merge PDFs";
+    mergeBtn.textContent = i18n.t(mergeBtn.dataset.i18n);
     mergeBtn.disabled = false;
     mergeProgress.hidden = true;
-    alert(`Error: ${err.message}`);
+    alert(i18n.t("error.generic", { message: err.message }));
   }
+});
+
+// ---------- i18n ----------
+document.addEventListener("DOMContentLoaded", () => {
+  i18n.init();
+
+  document.getElementById("lang-select").addEventListener("change", (e) => {
+    i18n.setLocale(e.target.value);
+  });
 });

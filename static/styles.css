@@ -16,6 +16,7 @@ header {
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 2rem 0;
   text-align: center;
+  position: relative;
 }
 
 h1 {
@@ -265,4 +266,21 @@ main {
   text-align: center;
   color: #94a3b8;
   padding: 2rem;
+}
+
+/* ---------- Language Selector ---------- */
+.lang-selector {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+.lang-selector:hover {
+  border-color: #94a3b8;
 }

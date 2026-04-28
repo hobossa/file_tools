@@ -3,17 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Tools</title>
+  <title data-i18n="app.title">File Tools</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
   <header>
-    <h1>File Tools</h1>
+    <h1 data-i18n="app.title">File Tools</h1>
     <nav class="tabs">
-      <button class="tab-btn active" data-tab="image">Compress Image</button>
-      <button class="tab-btn" data-tab="pdf">Compress PDF</button>
-      <button class="tab-btn" data-tab="merge">Merge PDFs</button>
+      <button class="tab-btn active" data-tab="image" data-i18n="nav.compress_image">Compress Image</button>
+      <button class="tab-btn" data-tab="pdf" data-i18n="nav.compress_pdf">Compress PDF</button>
+      <button class="tab-btn" data-tab="merge" data-i18n="nav.merge_pdf">Merge PDFs</button>
     </nav>
+    <select id="lang-select" class="lang-selector">
+      <option value="en" data-i18n="lang.en">English</option>
+      <option value="fr" data-i18n="lang.fr">Français</option>
+      <option value="zh-CN" data-i18n="lang.zh-CN">中文 (简体)</option>
+      <option value="zh-TW" data-i18n="lang.zh-TW">中文 (繁體)</option>
+      <option value="ko" data-i18n="lang.ko">한국어</option>
+      <option value="ja" data-i18n="lang.ja">日本語</option>
+      <option value="hi" data-i18n="lang.hi">हिन्दी</option>
+    </select>
   </header>
 
   <main>
@@ -22,8 +31,8 @@
       <div class="drop-zone" data-accept="image/*">
         <div class="drop-content">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Drag &amp; drop an image here, or click to browse</p>
-          <span class="drop-hint">Supports JPG, PNG, WebP</span>
+          <p data-i18n="drop.image.text">Drag & drop an image here, or click to browse</p>
+          <span class="drop-hint" data-i18n="drop.image.hint">Supports JPG, PNG, WebP</span>
         </div>
         <input type="file" hidden accept="image/*">
       </div>
@@ -35,30 +44,30 @@
 
       <div class="controls">
         <label class="slider-label">
-          Quality: <span class="quality-value">80</span>
+          <span data-i18n="control.quality">Quality: </span><span class="quality-value">80</span>
           <input type="range" class="quality-slider" min="1" max="100" value="80">
         </label>
-        <button class="btn btn-primary" disabled>Compress Image</button>
+        <button class="btn btn-primary" disabled data-i18n="button.compress_image">Compress Image</button>
       </div>
 
       <div class="results" hidden>
-        <h3>Results</h3>
+        <h3 data-i18n="results.heading">Results</h3>
         <div class="result-stats">
           <div class="stat">
-            <span class="stat-label">Original</span>
+            <span class="stat-label" data-i18n="stat.original">Original</span>
             <span class="stat-value original-size"></span>
           </div>
           <div class="stat">
-            <span class="stat-label">Compressed</span>
+            <span class="stat-label" data-i18n="stat.compressed">Compressed</span>
             <span class="stat-value compressed-size"></span>
           </div>
           <div class="stat">
-            <span class="stat-label">Reduction</span>
+            <span class="stat-label" data-i18n="stat.reduction">Reduction</span>
             <span class="stat-value reduction"></span>
           </div>
         </div>
-        <button class="btn btn-download">Download</button>
-        <button class="btn btn-reset">Compress Another</button>
+        <button class="btn btn-download" data-i18n="button.download">Download</button>
+        <button class="btn btn-reset" data-i18n="button.compress_another">Compress Another</button>
       </div>
 
       <div class="progress-bar" hidden>
@@ -71,8 +80,8 @@
       <div class="drop-zone" data-accept="application/pdf">
         <div class="drop-content">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Drag &amp; drop a PDF here, or click to browse</p>
-          <span class="drop-hint">Supports PDF</span>
+          <p data-i18n="drop.pdf.text">Drag & drop a PDF here, or click to browse</p>
+          <span class="drop-hint" data-i18n="drop.pdf.hint">Supports PDF</span>
         </div>
         <input type="file" hidden accept="application/pdf">
       </div>
@@ -84,30 +93,30 @@
 
       <div class="controls">
         <label class="slider-label">
-          Quality: <span class="quality-value">80</span>
+          <span data-i18n="control.quality">Quality: </span><span class="quality-value">80</span>
           <input type="range" class="quality-slider" min="1" max="100" value="80">
         </label>
-        <button class="btn btn-primary" disabled>Compress PDF</button>
+        <button class="btn btn-primary" disabled data-i18n="button.compress_pdf">Compress PDF</button>
       </div>
 
       <div class="results" hidden>
-        <h3>Results</h3>
+        <h3 data-i18n="results.heading">Results</h3>
         <div class="result-stats">
           <div class="stat">
-            <span class="stat-label">Original</span>
+            <span class="stat-label" data-i18n="stat.original">Original</span>
             <span class="stat-value original-size"></span>
           </div>
           <div class="stat">
-            <span class="stat-label">Compressed</span>
+            <span class="stat-label" data-i18n="stat.compressed">Compressed</span>
             <span class="stat-value compressed-size"></span>
           </div>
           <div class="stat">
-            <span class="stat-label">Reduction</span>
+            <span class="stat-label" data-i18n="stat.reduction">Reduction</span>
             <span class="stat-value reduction"></span>
           </div>
         </div>
-        <button class="btn btn-download">Download</button>
-        <button class="btn btn-reset">Compress Another</button>
+        <button class="btn btn-download" data-i18n="button.download">Download</button>
+        <button class="btn btn-reset" data-i18n="button.compress_another">Compress Another</button>
       </div>
 
       <div class="progress-bar" hidden>
@@ -120,35 +129,35 @@
       <div class="drop-zone" data-accept="application/pdf" data-multiple>
         <div class="drop-content">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Drag &amp; drop PDFs here, or click to browse</p>
-          <span class="drop-hint">Drop multiple PDFs to merge</span>
+          <p data-i18n="drop.merge.text">Drag & drop PDFs here, or click to browse</p>
+          <span class="drop-hint" data-i18n="drop.merge.hint">Drop multiple PDFs to merge</span>
         </div>
         <input type="file" hidden accept="application/pdf" multiple>
       </div>
 
       <div class="file-list-container" hidden>
-        <h3>Files to Merge</h3>
+        <h3 data-i18n="file_list.heading">Files to Merge</h3>
         <ul class="file-list"></ul>
       </div>
 
       <div class="controls">
-        <button class="btn btn-primary" disabled>Merge PDFs</button>
+        <button class="btn btn-primary" disabled data-i18n="button.merge_pdf">Merge PDFs</button>
       </div>
 
       <div class="results" hidden>
-        <h3>Merge Complete</h3>
+        <h3 data-i18n="results.merge_heading">Merge Complete</h3>
         <div class="result-stats">
           <div class="stat">
-            <span class="stat-label">Total pages</span>
+            <span class="stat-label" data-i18n="stat.total_pages">Total pages</span>
             <span class="stat-value total-pages"></span>
           </div>
           <div class="stat">
-            <span class="stat-label">Result size</span>
+            <span class="stat-label" data-i18n="stat.result_size">Result size</span>
             <span class="stat-value result-size"></span>
           </div>
         </div>
-        <button class="btn btn-download">Download Merged PDF</button>
-        <button class="btn btn-reset">Merge More</button>
+        <button class="btn btn-download" data-i18n="button.download_merged">Download Merged PDF</button>
+        <button class="btn btn-reset" data-i18n="button.merge_more">Merge More</button>
       </div>
 
       <div class="progress-bar" hidden>
@@ -157,6 +166,7 @@
     </section>
   </main>
 
+  <script src="/static/i18n.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>
