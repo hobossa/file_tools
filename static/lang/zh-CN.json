@@ -10,6 +10,7 @@
   "drop.merge.text": "将 PDF 拖拽到这里，或点击浏览",
   "drop.merge.hint": "可拖拽多个 PDF 进行合并",
   "control.quality": "质量：",
+  "control.target_dpi": "目标 DPI：",
   "button.compress_image": "压缩图片",
   "button.compress_pdf": "压缩PDF",
   "button.merge_pdf": "合并PDF",

@@ -10,6 +10,7 @@
   "drop.merge.text": "PDFをドラッグ＆ドロップ、またはクリックして選択",
   "drop.merge.hint": "複数のPDFをドロップして結合",
   "control.quality": "品質：",
+  "control.target_dpi": "目標 DPI：",
   "button.compress_image": "画像を圧縮",
   "button.compress_pdf": "PDFを圧縮",
   "button.merge_pdf": "PDFを結合",

@@ -67,8 +67,14 @@ function initDropZone(zone) {
 
 document.querySelectorAll(".drop-zone").forEach(initDropZone);
 
-// ---------- Quality Sliders ----------
+// ---------- Quality & DPI Sliders ----------
 document.querySelectorAll(".quality-slider").forEach((slider) => {
+  slider.addEventListener("input", () => {
+    slider.previousElementSibling.textContent = slider.value;
+  });
+});
+
+document.querySelectorAll(".dpi-slider").forEach((slider) => {
   slider.addEventListener("input", () => {
     slider.previousElementSibling.textContent = slider.value;
   });
@@ -84,6 +90,7 @@ function initCompressTab(tabId, endpoint) {
   const fileSize = fileInfo.querySelector(".file-size");
   const btn = tab.querySelector(".btn-primary");
   const slider = tab.querySelector(".quality-slider");
+  const dpiSlider = tab.querySelector(".dpi-slider");
   const results = tab.querySelector(".results");
   const progressBar = tab.querySelector(".progress-bar");
   const progressFill = progressBar.querySelector(".progress-fill");
@@ -114,6 +121,7 @@ function initCompressTab(tabId, endpoint) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("quality", slider.value);
+    if (dpiSlider) formData.append("dpi", dpiSlider.value);
 
     const xhr = new XMLHttpRequest();
 

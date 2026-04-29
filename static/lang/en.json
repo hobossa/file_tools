@@ -10,6 +10,7 @@
   "drop.merge.text": "Drag & drop PDFs here, or click to browse",
   "drop.merge.hint": "Drop multiple PDFs to merge",
   "control.quality": "Quality: ",
+  "control.target_dpi": "Target DPI: ",
   "button.compress_image": "Compress Image",
   "button.compress_pdf": "Compress PDF",
   "button.merge_pdf": "Merge PDFs",

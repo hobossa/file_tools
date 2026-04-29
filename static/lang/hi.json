@@ -10,6 +10,7 @@
   "drop.merge.text": "PDF को यहाँ खींचें और छोड़ें, या ब्राउज़ करें पर क्लिक करें",
   "drop.merge.hint": "मर्ज करने के लिए कई PDF छोड़ें",
   "control.quality": "गुणवत्ता: ",
+  "control.target_dpi": "लक्ष्य DPI: ",
   "button.compress_image": "इमेज कंप्रेस करें",
   "button.compress_pdf": "PDF कंप्रेस करें",
   "button.merge_pdf": "PDF मर्ज करें",

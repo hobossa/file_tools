@@ -10,6 +10,7 @@
   "drop.merge.text": "Glissez-déposez des PDF ici, ou cliquez pour parcourir",
   "drop.merge.hint": "Déposez plusieurs PDF à fusionner",
   "control.quality": "Qualité : ",
+  "control.target_dpi": "DPI cible : ",
   "button.compress_image": "Compresser l'image",
   "button.compress_pdf": "Compresser le PDF",
   "button.merge_pdf": "Fusionner les PDF",

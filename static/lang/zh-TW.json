@@ -10,6 +10,7 @@
   "drop.merge.text": "將 PDF 拖曳到這裡，或點選瀏覽",
   "drop.merge.hint": "可拖曳多個 PDF 進行合併",
   "control.quality": "品質：",
+  "control.target_dpi": "目標 DPI：",
   "button.compress_image": "壓縮圖片",
   "button.compress_pdf": "壓縮PDF",
   "button.merge_pdf": "合併PDF",

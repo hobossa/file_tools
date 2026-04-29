@@ -56,44 +56,94 @@ async def compress_image(file: UploadFile = File(...), quality: int = Form(80)):
 
 # ---------- PDF Compression ----------
 
-def _recompress_pdf_images(doc: fitz.Document, quality: int):
-    """Recompress every image in the PDF as JPEG with the given quality."""
+def _recompress_pdf_images(doc: fitz.Document, quality: int, target_dpi: int = 150):
+    """Recompress images in the PDF, accounting for effective DPI.
+
+    Images whose effective DPI exceeds *target_dpi* are downsampled to that
+    resolution before JPEG re-encoding.  Images below the target DPI are
+    kept at their original pixel dimensions but compressed at a proportionally
+    lower quality — the visual quality is already pixel-limited, so more
+    aggressive compression is safe.
+    """
+    processed_xrefs: set[int] = set()
+
     for page in doc:
         for img in page.get_images():
             xref = img[0]
-            pix = fitz.Pixmap(doc, xref)
-
-            # Skip images smaller than 1KB — unlikely to benefit
-            if pix.n < 4:
-                try:
-                    raw_len = len(pix.tobytes())
-                except Exception:
-                    raw_len = 0
-                if raw_len < 1024:
-                    continue
+            if xref in processed_xrefs:
+                continue
+            processed_xrefs.add(xref)
 
             try:
-                # Convert to RGB if needed (JPEG doesn't support CMYK / alpha)
-                if pix.n > 3:
-                    pix = fitz.Pixmap(fitz.csRGB, pix)
-
-                compressed_img = pix.tobytes("jpeg", jpg_quality=quality)
-
-                # Only replace if the compressed version is actually smaller
-                if len(compressed_img) < pix.n * pix.w * pix.h:
-                    page.replace_image(xref, stream=compressed_img)
+                pix = fitz.Pixmap(doc, xref)
             except Exception:
-                pass  # Skip images that can't be recompressed
+                continue
+
+            # Determine where (and how large) the image is displayed.
+            img_rects = page.get_image_rects(xref)
+            if not img_rects:
+                continue
+
+            # Use the largest placement for quality decisions.
+            display_rect = max(img_rects, key=lambda r: r.width * r.height)
+            display_w_in = display_rect.width / 72   # points → inches
+            display_h_in = display_rect.height / 72
+
+            if display_w_in <= 0 or display_h_in <= 0:
+                continue
+
+            effective_dpi = max(pix.w / display_w_in, pix.h / display_h_in)
+
+            # Convert to PIL for high-quality resize + JPEG encoding.
+            if pix.n > 3:
+                try:
+                    pix = fitz.Pixmap(fitz.csRGB, pix)
+                except Exception:
+                    continue
+
+            mode = {1: "L", 2: "LA", 3: "RGB", 4: "RGBA"}.get(pix.n, "RGB")
+            try:
+                pil_img = Image.frombytes(mode, (pix.w, pix.h), pix.samples)
+            except Exception:
+                continue
+
+            dpi_ratio = effective_dpi / target_dpi
+
+            if dpi_ratio > 1:
+                # Oversampled — downsample to target DPI.
+                target_w = max(1, int(display_w_in * target_dpi))
+                target_h = max(1, int(display_h_in * target_dpi))
+                pil_img = pil_img.resize((target_w, target_h), Image.LANCZOS)
+                effective_quality = quality
+            else:
+                # Undersampled — already pixel-limited, compress more aggressively.
+                effective_quality = max(10, int(quality * dpi_ratio))
+
+            if pil_img.mode != "RGB":
+                pil_img = pil_img.convert("RGB")
+
+            buf = io.BytesIO()
+            pil_img.save(buf, format="JPEG", quality=effective_quality, optimize=True)
+            compressed = buf.getvalue()
+
+            # Compare against the actual stored stream size.
+            try:
+                original_size = len(doc.xref_stream(xref))
+            except Exception:
+                original_size = pix.w * pix.h * pix.n
+
+            if len(compressed) < original_size:
+                page.replace_image(xref, stream=compressed)
 
     return doc
 
 
 @app.post("/api/compress-pdf")
-async def compress_pdf(file: UploadFile = File(...), quality: int = Form(80)):
+async def compress_pdf(file: UploadFile = File(...), quality: int = Form(80), dpi: int = Form(150)):
     contents = await file.read()
     doc = fitz.open(stream=contents, filetype="pdf")
 
-    doc = _recompress_pdf_images(doc, quality)
+    doc = _recompress_pdf_images(doc, quality, target_dpi=dpi)
 
     buf = io.BytesIO()
     doc.save(buf, garbage=4, deflate=True, clean=True)
