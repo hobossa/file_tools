@@ -2,6 +2,12 @@
 
 A self-hosted web app for compressing images, compressing PDFs, and merging PDFs — all processed locally in your browser.
 
+## Why I built this
+
+I often need to compress or merge scanned documents — ID copies, passports, visa paperwork, and the like. I used to rely on online web apps, but I was never comfortable uploading sensitive identity documents to a random website. Who knows where that data ends up?
+
+This project runs entirely on your own machine. Nothing leaves your computer. I open-sourced it so others with the same privacy concerns can use it — or verify exactly what the code does.
+
 ## Features
 
 - **Compress Image** — Drag and drop an image, adjust the quality slider (1–100), and download the result. JPEGs are re-encoded with the chosen quality. PNGs with quality ≥ 50 keep transparency; below 50 they convert to JPEG for aggressive size reduction. WebP is preserved natively.
